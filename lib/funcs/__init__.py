@@ -1,3 +1,4 @@
+import random
 def leiaInt(msg):
     """
     Docstring for leiaInt
@@ -12,7 +13,7 @@ def leiaInt(msg):
             print('\033[31mERRO! por favor digite corretamente!\033[0m')
         except KeyboardInterrupt:
             print('\033[32mERRO! O usuário preferiu não digitar esse valor.\033[0m')
-            return 3
+            return 4
         else:
             return n
             
@@ -45,7 +46,7 @@ def lerArquivo(nome):
     except:
         print('Falha ao ler o arquivo.')
     else:
-        print(f'{"POS.":<7}{"ID":<5}{"NOME":^25}{"IDADE":>3}')
+        
         linhas = a.readlines()
         
         for i, value in enumerate(linhas):
@@ -75,6 +76,14 @@ def criarArquivo(nome):
 
 
 def cadastrar(arq,id,nome='<Desconhecido>', idade=0):
+    """
+    Docstring for cadastrar
+    
+    :param arq: Nome do arquivo onde estão os registros
+    :param id: Número aleatório gerado apartir da função randomizar()
+    :param nome: Nome digitado pelo usuário
+    :param idade: Idade digitada pelo usuário
+    """
     try:
         a = open(arq, 'at')
     except:
@@ -92,24 +101,87 @@ def cadastrar(arq,id,nome='<Desconhecido>', idade=0):
             a.close()
             
 
+def randomizar(arq):
+    """
+    Docstring for randomizar
+    
+    :param arq: Nome do arquivo onde estão os registros
+    :return: retorna um id único entre 1 e 100
 
+    """
+    try:
+        a = open(arq, 'rt')
+    except:
+        print('\033[31mERRO! Falha ao ler o arquvio.')
+    else:
+        linhas = a.readlines()
+        a.close()
+        
+        ids_existentes = []
+        for linha in linhas:
+            partes = linha.strip().split(';')
+            ids_existentes.append(partes[0])
+        
+        while True:
+           novo_id = str(random.randint(1,50))
+           if novo_id not in ids_existentes:
+               return novo_id
+    
+        
 
-def deletar(arq,cod):
+def deletarId(arq,cod):
+    """
+    Docstring for deletarId
+    
+    :param arq: Nome do arquivo onde estão os registros
+    :param cod: Id digitado pelo usuário
+    """
     try:
         a = open(arq, 'rt')
         dados = a.readlines()
         a.close()
         
+        encontrado = False
+        
         for i in range(len(dados)):
             if dados[i].startswith(str(cod)):
                 del dados[i]
+                encontrado = True
                 break
+            
+        if encontrado:
+            a = open(arq, 'wt')
+            for i in dados:
+                a.write(i)
+            a.close()
+            print(f'ID {cod} deletado com sucesso')
+        else:
+            print(f"\033[31mERRO! Id {cod} não encontrado.\033[0m")
+            
+    except (ValueError, TypeError, IndexError):
+        print("\033[31mERRO! Não foi possível excluir.\033[0m")
+        
+        
+def deletarPos(arq,cod):
+    """
+    Docstring for deletarPos
+    
+    :param arq: Nome do arquivo onde estão os registros
+    :param cod: Posição digitada pelo usuário
+    """
+    try:
+        a = open(arq, 'rt')
+        dados = a.readlines()
+        del dados[cod - 1]
+        a.close()
+        
         
         a = open(arq, 'wt')
-        for i in dados:
+        for i in dados: 
             a.write(i)
         a.close()
+                
     except (ValueError, TypeError, IndexError):
-        print("\033[31mERRO! ID não encontrado, não foi possível excluir.\033[0m")
+        print("\033[31mERRO! Posição não encontrada, não foi possível excluir.\033[0m")  
     else:
-        print(f'ID {cod} deletado com sucesso')
+        print(f'\033[32mPosição {cod} deletada com sucesso!\033[0m')                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
