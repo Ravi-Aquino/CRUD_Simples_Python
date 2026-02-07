@@ -30,9 +30,11 @@ while True:
                 while True:
                     cabeçalho('CADASTRAR NOVA PESSOA')
                     nome = str(input('Nome: ')).capitalize().strip()
+                    
                     while nome.isnumeric():
                         print('\033[31mERRO! Não é permitido numeros nos nomes. Digite o nome corretamente!\033[0m')
                         nome = str(input('Nome: ')).capitalize().strip()
+                        
                     idade = leiaInt('Idade: ')
                     idPessoa = geradorId(arq)
                     cadastrar(arq,idPessoa,nome,idade)
